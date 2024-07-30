@@ -19,8 +19,6 @@ public struct AEOTPView: View {
     @Binding private var text: String
     /// An Intger value to set the number of the slots of the `AEOTPView`
     private let slotsCount: Int
-    /// A CGFloat value to set a custom width to the `AEOTPView`
-    private let width: CGFloat
     /// A CGFloat value to set a custom height to the `AEOTPView`
     private let height: CGFloat
     /// The default character placed in the text field slots
@@ -53,6 +51,7 @@ public struct AEOTPView: View {
     private var onCommit: (() -> Void)?
     /// Type of keyboard to show
     private let keyboardType: UIKeyboardType
+    private let autofocus: Bool
 
     // MARK: - INIT
 
@@ -80,7 +79,6 @@ public struct AEOTPView: View {
     public init(
         text: Binding<String>,
         slotsCount: Int = 6,
-        width: CGFloat = UIScreen.main.bounds.width * 0.8,
         height: CGFloat = 40,
         otpDefaultCharacter: String = "",
         otpBackgroundColor: UIColor = UIColor(red: 0.949, green: 0.949, blue: 0.949, alpha: 1),
@@ -96,11 +94,11 @@ public struct AEOTPView: View {
         isSecureTextEntry: Bool = false,
         enableClearOTP: Bool = false,
         onCommit: (() -> Void)? = nil,
-        keyboardType: UIKeyboardType = .numberPad
+        keyboardType: UIKeyboardType = .numberPad,
+        autofocus: Bool = false
     ) {
         self._text = text
         self.slotsCount = slotsCount
-        self.width = width
         self.height = height
         self.otpDefaultCharacter = otpDefaultCharacter
         self.otpBackgroundColor = otpBackgroundColor
@@ -117,6 +115,7 @@ public struct AEOTPView: View {
         self.enableClearOTP = enableClearOTP
         self.onCommit = onCommit
         self.keyboardType = keyboardType
+        self.autofocus = autofocus
     }
 
     // MARK: - BODY
@@ -130,7 +129,7 @@ public struct AEOTPView: View {
                 otpView
             }
         } //: ZStack
-        .frame(width: width, height: height)
+        .frame(height: height)
         .onChange(of: text) { newValue in
             guard enableClearOTP else { return }
             if newValue.isEmpty {
@@ -159,7 +158,8 @@ public struct AEOTPView: View {
             otpFont: otpFont,
             isSecureTextEntry: isSecureTextEntry,
             onCommit: onCommit,
-            keyboardType: keyboardType
+            keyboardType: keyboardType,
+            autofocus: autofocus
         )
     } //: otpView
 }

@@ -25,7 +25,8 @@ struct AEOTPViewRepresentable: UIViewRepresentable {
     private let isSecureTextEntry: Bool
     private let onCommit: (() -> Void)?
     private let textField: AEOTPTextFieldSwiftUI
-        
+    private let autofocus: Bool
+
     init(
         text: Binding<String>,
         slotsCount: Int = 6,
@@ -42,7 +43,8 @@ struct AEOTPViewRepresentable: UIViewRepresentable {
         otpFont: UIFont = UIFont.systemFont(ofSize: 14),
         isSecureTextEntry: Bool = false,
         onCommit: (() -> Void)? = nil,
-        keyboardType: UIKeyboardType = .numberPad
+        keyboardType: UIKeyboardType = .numberPad,
+        autofocus: Bool = false
     ) {
         self._text = text
         self.slotsCount = slotsCount
@@ -59,7 +61,8 @@ struct AEOTPViewRepresentable: UIViewRepresentable {
         self.otpFont = otpFont
         self.isSecureTextEntry = isSecureTextEntry
         self.onCommit = onCommit
-        
+        self.autofocus = autofocus
+
         self.textField = AEOTPTextFieldSwiftUI(
             slotsCount: slotsCount,
             otpDefaultCharacter: otpDefaultCharacter,
@@ -77,6 +80,10 @@ struct AEOTPViewRepresentable: UIViewRepresentable {
         )
         
         textField.keyboardType = keyboardType
+
+        if autofocus {
+            textField.becomeFirstResponder()
+        }
     }
     
     func makeCoordinator() -> Coordinator {
